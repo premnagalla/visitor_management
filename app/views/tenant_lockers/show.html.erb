@@ -1,0 +1,25 @@
+<%- model_class = TenantLocker -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
+  <dd><%= @tenant_locker.user_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:locker_id) %>:</strong></dt>
+  <dd><%= @tenant_locker.locker_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:start_date) %>:</strong></dt>
+  <dd><%= @tenant_locker.start_date %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:end_date) %>:</strong></dt>
+  <dd><%= @tenant_locker.end_date %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              tenant_lockers_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_tenant_locker_path(@tenant_locker), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              tenant_locker_path(@tenant_locker),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

@@ -1,0 +1,69 @@
+<%- model_class = Visit -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              visits_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_visit_path(@visit), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              visit_path(@visit),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+<br/><br/>
+<h4>Visit Details: </h4>
+<table class="table table-bordered">
+  <thead style="background-color: #80C4FF">
+    <tr>
+      <th><strong><%= model_class.human_attribute_name(:tenant_id) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:first_name) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:last_name) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:visitor_id) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:email) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:contact_no) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:no_of_guests) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:govt_id_type) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:govt_id) %>:</strong></th>
+      <th><strong><%= model_class.human_attribute_name(:visit_time) %>:</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @visit.tenant_id %></td>
+      <td><%= @visit.first_name %></td>
+      <td><%= @visit.last_name %></td>
+      <td><%= @visit.visitor_id %></td>
+      <td><%= @visit.email %></td>
+      <td><%= @visit.contact_no %></td>
+      <td><%= @visit.no_of_guests %></td>
+      <td><%= @visit.govt_id_type %></td>
+      <td><%= @visit.govt_id %></td>
+      <td><%= @visit.visit_time %></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4> Locker Details: </h4>
+<table class="table table-bordered">
+  <thead style="background-color: #80C4FF">
+    <tr>
+      <th><strong><%= TenantLocker.human_attribute_name(:locker_id) %>:</strong></th>
+      <th><strong><%= TenantLocker.human_attribute_name(:start_date) %>:</strong></th>
+      <th><strong><%= TenantLocker.human_attribute_name(:end_date) %>:</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @visit.tenant_locker.locker_id rescue nil %></td>
+      <td><%= @visit.tenant_locker.start_date rescue nil %></td>
+      <td><%= @visit.tenant_locker.end_date rescue nil%></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<hr/>
+<div id="passcode">
+  <h2> Passcode:  <%= @visit.passcode %> </h2>
+</div>
+

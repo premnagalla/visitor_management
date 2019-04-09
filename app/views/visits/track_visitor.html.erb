@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 700px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+    <h3>Tracking Location of the visitor</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <div id="details">
+      <h3> Visitor Details: </h3>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th> Id</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Resident</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= @visitor.id %></td>
+            <td><%= @visitor.first_name %></td>
+            <td><%= @visitor.last_name %></td>
+            <td><%= @visitor.email %></td>
+            <td><%= User.find(@visitor.tenant_id).first_name rescue nil %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script>
+// Initialize and add the map
+function initMap() {
+  // The location of Uluru
+var directionsService = new google.maps.DirectionsService;
+var directionsDisplay = new google.maps.DirectionsRenderer;
+  var start = new google.maps.LatLng(17.436853, 78.384355);
+  var end = new google.maps.LatLng(17.440579, 78.378990);
+  var lineSymbol = {
+               path: google.maps.SymbolPath.CIRCLE,
+               fillOpacity: 1,
+               scale: 3
+           };
+  var polylineDotted = {
+               strokeColor: '#0eb7f6',
+               strokeOpacity: 0,
+               fillOpacity: 0,
+               icons: [{
+                   icon: lineSymbol,
+                   offset: '0',
+                   repeat: '10px'
+               }],
+           };
+
+           var rendererOptions = {
+               map: map,
+               suppressMarkers: false,
+               polylineOptions: polylineDotted
+           };
+           directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 14, center: start});
+
+directionsDisplay.setMap(map);
+  // The marker, positioned at Uluru
+  var marker = new google.maps.Marker({position: start, map: map});
+  var infowindow = new google.maps.InfoWindow({
+     content: "<%= @visitor.first_name %>"
+  });
+  marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+  calculateAndDisplayRoute(directionsService, directionsDisplay, start, end);
+
+
+}
+
+  function calculateAndDisplayRoute(directionsService, directionsDisplay, start , end) {
+    directionsService.route({
+      origin: start,
+      destination: end,
+      travelMode: 'WALKING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
+  }
+
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMG9DCLoeyavLQ830mUdw3lBG8vRryv3k &callback=initMap">
+    </script>
+  </body>
+</html>

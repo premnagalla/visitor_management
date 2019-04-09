@@ -1,0 +1,92 @@
+<% member_url = @member.persisted? ? member_path(@member.id) : members_path %>
+<% member_meth = @member.persisted? ? :put : :post %>
+<%= form_for @member, url: member_url, method: member_meth, :html => { :class => "form-horizontal member" } do |f| %>
+
+  <% if @member.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@member.errors.count, "error") %> prohibited this member from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @member.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :first_name, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :first_name, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:first_name) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :last_name, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :last_name, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:last_name) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :email, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :email, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:email) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :password, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :password, type: :password, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:password) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :password_confirmation, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :password_confirmation, type: :password, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:password_confirmation) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :contact_no, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :contact_no, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:contact_no) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :alt_contact_no, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_field :alt_contact_no, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:alt_contact_no) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :role, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.select :role, User::ROLES, {}, {class: 'form-control'} %>
+    </div>
+    <%=f.error_span(:role) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :address, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-3">
+      <%= f.text_area :address, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:address) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-3">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <% cancel_pat = @member.persisted? ? member_path(@member.id) : members_path %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                cancel_pat, :class => 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,57 @@
+<%- model_class = Visit -%>
+<div class="page-header">
+  <h1>Visitors List</h1>
+</div>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_visit_path,
+            :class => 'btn btn-primary' %>
+          <br/><br/>
+<table class="table table-striped">
+  <thead style="background-color: #80C4FF">
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:tenant_id) %></th>
+      <th><%= model_class.human_attribute_name(:first_name) %></th>
+      <th><%= model_class.human_attribute_name(:last_name) %></th>
+      <th><%= model_class.human_attribute_name(:email) %></th>
+      <th><%= model_class.human_attribute_name(:contact_no) %></th>
+      <th><%= model_class.human_attribute_name(:no_of_guests) %></th>
+      <th><%= model_class.human_attribute_name(:govt_id_type) %></th>
+      <th><%= model_class.human_attribute_name(:govt_id) %></th>
+      <th><%= model_class.human_attribute_name(:visit_time) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @visits.each do |visit| %>
+      <tr>
+        <td><%= link_to visit.id, visit_path(visit) %></td>
+        <td><%= User.find(visit.tenant_id).first_name rescue nil %></td>
+        <td><%= visit.first_name %></td>
+        <td><%= visit.last_name %></td>
+        <td><%= visit.email %></td>
+        <td><%= visit.contact_no %></td>
+        <td><%= visit.no_of_guests %></td>
+        <td><%= visit.govt_id_type %></td>
+        <td><%= visit.govt_id %></td>
+        <td><%= visit.visit_time %></td>
+        <td><%=l visit.created_at %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      visit_path(visit), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_visit_path(visit), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      visit_path(visit),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+          <%= link_to t('.track_visitor', default: t("helpers.link.track_visitor")),
+                    track_visitor_visit_path(visit), target: '_new', class: "btn tn-default btn-xs glyphicon glyphicon-screenshot" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant_id: 1
+  first_name: MyString
+  last_name: MyString
+  visitor_id: 1
+  email: MyString
+  contact_no: MyString
+  no_of_guests: 1
+  govt_id_type: MyString
+  govt_id: MyString
+  visit_time: 2019-04-07 17:25:32
+
+two:
+  tenant_id: 1
+  first_name: MyString
+  last_name: MyString
+  visitor_id: 1
+  email: MyString
+  contact_no: MyString
+  no_of_guests: 1
+  govt_id_type: MyString
+  govt_id: MyString
+  visit_time: 2019-04-07 17:25:32

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  locker_id: 1
+  start_date: 2019-04-07 14:53:08
+  end_date: 2019-04-07 14:53:08
+
+two:
+  user_id: 1
+  locker_id: 1
+  start_date: 2019-04-07 14:53:08
+  end_date: 2019-04-07 14:53:08

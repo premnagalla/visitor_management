@@ -1,0 +1,173 @@
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<style>
+  .container{
+    height: 900px;
+  }
+  .navbar-default{
+    background-color: #80C4FF;
+    color: #fff;
+    font-size: 14px;
+  }
+  .footer{
+    background-color: #80C4FF;
+    color: #fff;
+    height:60px;
+    font-size: 14px;
+  }
+  .links {
+      color: white;
+      font-size: 25px;
+      font-family: bold;
+    }
+  table thead tr {
+    color: white;
+  }
+</style>
+<%= form_for @visit, :html => { :class => "form-horizontal visit" } do |f| %>
+  <% if @visit.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@visit.errors.count, "error") %> prohibited this visit from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @visit.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :tenant_id, "To Visit", class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <% if ['admin', "security"].include?(current_user.role) %>
+        <%= f.select :tenant_id, User.where(role: "resident").collect { |t| [ t.full_name, t.id ] }, {include_blank: true}, {class: 'form-control'} %>
+      <% else %>
+        <%= text_field_tag 'tenant_name',  "#{current_user.full_name}", class: 'form-control' %>
+        <%= f.hidden_field :tenant_id %>
+      <% end %>
+    </div>
+    <%=f.error_span(:tenant_id) %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :first_name, 'Visitor First Name', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :first_name, :class => 'form-control' , required: true%>
+    </div>
+    <%=f.error_span(:first_name) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :last_name, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :last_name, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:last_name) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :email, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :email, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:email) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :contact_no, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :contact_no, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:contact_no) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :no_of_guests, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :no_of_guests, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:no_of_guests) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :allow_more_or_less, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.check_box :allow_more_or_less%>
+    </div>
+    <%=f.error_span(:allow_more_or_less) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :govt_id_type, 'Authorized Id Type'.capitalize, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.select :govt_id_type, ["SSN", "License Number", "other" ], {selected: 'License Number'}, {class: 'form-control'} %>
+    </div>
+    <%=f.error_span(:govt_id_type) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :govt_id, 'Authorized Id Proof'.capitalize, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :govt_id, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:govt_id) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :visit_time, :class => 'control-label col-lg-2' %>
+    <div class='col-lg-10 input-group date form_datetime'>
+      <%= f.text_field :visit_time, :class => 'form-control' %>
+      <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+      </span>
+    </div>
+    <%=f.error_span(:visit_time) %>
+  </div>
+
+  <!-- Locker Part -->
+  <%= f.fields_for :tenant_locker, @visit.tenant_locker do |tl_fields| %>
+    <div class="form-group">
+      <%= tl_fields.label :locker_id, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= tl_fields.select :locker_id, Locker.available.pluck(:id), {include_blank: true}, {class: 'form-control'} %>
+      </div>
+      <%=tl_fields.error_span(:locker_id) %>
+    </div>
+    <div class="form-group">
+      <%= tl_fields.label :start_date, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10 input-group date form_date">
+        <%= tl_fields.text_field :start_date, :class => 'form-control' %>
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+      </div>
+      <%=tl_fields.error_span(:start_date) %>
+    </div>
+    <div class="form-group">
+      <%= tl_fields.label :end_date, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10 input-group date form_date">
+        <%= tl_fields.text_field :end_date, :class => 'form-control' %>
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+      </div>
+      <%=tl_fields.error_span(:end_date) %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                visits_path, :class => 'btn btn-default' %>
+      <%= link_to t('.release', :default => t("helpers.links.release")),
+                visits_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(".form_datetime").datetimepicker();
+  $(".form_date").datetimepicker({format: 'll'});
+</script>
